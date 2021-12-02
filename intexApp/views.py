@@ -2,11 +2,11 @@ from django.shortcuts import render
 
 # Create your views here.
 
-def prescriberPageView(request) :
+def indexPageView(request) :
     return render(request, 'intexApp/index.html')
 
 def drugPageView(request) :
-    return render(request, 'intexApp/charts.html')
+    return render(request, 'intexApp/layout-sidenav-light.html')
 
-def analysesPageView(request) :
-    return render(request, 'intexApp/tables.html')
+def prescriberPageView(request) :
+    return render(request, 'intexApp/layout-static.html')

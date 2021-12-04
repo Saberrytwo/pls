@@ -1,4 +1,4 @@
-from django.db.models.aggregates import Avg
+from django.db.models import Avg
 from django.shortcuts import render
 from intexApp.models import PdPrescribersCredentials, PdPrescriber, PdDrugs, PdTriple
 
@@ -17,12 +17,12 @@ def drugPageView(request) :
 
 def singleDrugPageView(request, drugname) :
     data = PdDrugs.objects.get(drugname = drugname)
-    presdata = PdTriple.objects.filter(drugname = drugname) 
-
-    #presdata = PdTriple.objects.raw(f"select id, prescriberid, drugname, qty from pd_triple order by drugname, qty desc limit 10;")
+    ten = PdTriple.objects.filter(drugname=drugname).order_by('-qty')[:10]
+    #presdata = PdPrescriber.objects.raw(f"select npi, fname, lname, { finaldrugname } from pd_prescriber order by { finaldrugname } desc limit 10")
     context = {
         "drug" : data,
-        "pres" : presdata
+        #"pres" : presdata,
+        "drugs" : ten,
     }
     return render(request, 'intexApp/singleDrug.html', context)
 
@@ -52,14 +52,20 @@ def prescriberPageView(request) :
 
 def singlePrescriberPageView(request, npi) :
     data = PdPrescriber.objects.get(npi = npi)
+    cred = PdPrescribersCredentials.objects.filter(npi = npi)
     drugdata = PdTriple.objects.filter(prescriberid = npi)
-    avg = PdTriple.objects.filter(prescriberid = npi)
-    avg = Avg(avg.values)
-    #avg = str(avg)
+    avg = {}
+    for i in drugdata :
+        a = PdTriple.objects.all()
+        ab = a.filter(drugname = i.drugname)
+        avg = (ab.aggregate(Avg('qty')))
+    print(avg)
+
     context = {
         "pres" : data,
         "drug" : drugdata,
-        #"avg" : avg,
+        "avg" : avg,
+        "cred" : cred,
     }
     return render(request, 'intexApp/singlePrescriber.html', context)
 

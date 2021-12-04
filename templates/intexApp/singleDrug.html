@@ -83,7 +83,7 @@
                     <h1 class="mt-4">List of Drugs</h1>
                     <ol class="breadcrumb mb-4">
                         <li class="breadcrumb-item"><a href="{% url 'index' %}">Homepage</a></li>
-                        <li class="breadcrumb-item active">Drug List</li>
+                        <li class="breadcrumb-item active"><a href="{% url 'drug' %}">Drug List</a></li>
                     </ol>
                     <div class="card mb-4">
                         <div class="card-header">
@@ -128,13 +128,12 @@
                                             {{ drug.isopioid }}
                                         </th>
                                         <th>
-                                            {% nameArray = [] %}
-                                            {% qtyArray = [] %}
-                                            {% for p in pres %}
-                                            {% nameArray.append({{ p.prescriberid }}) %},
-                                            {% qtyArray.append({{ p.qty }}) %}
+                                            {% for d in drugs %}
+                                            {{ d.prescriberid }} --
+                                            Quantity:
+                                            {{ d.qty }}
+                                            <br>
                                             {% endfor %}
-                                            {% for i in range(len(nameArray)) %}
                                         </th>
 
                                     </tr>

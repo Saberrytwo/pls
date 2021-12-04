@@ -88,7 +88,7 @@
                     <h1 class="mt-4">List of Prescribers</h1>
                     <ol class="breadcrumb mb-4">
                         <li class="breadcrumb-item"><a href="{% url 'index' %}">Homepage</a></li>
-                        <li class="breadcrumb-item active">Static Navigation</li>
+                        <li class="breadcrumb-item active"><a href="{% url 'prescriber' %}">List Prescribers</a></li>
                     </ol>
                     <div class="card mb-4">
 
@@ -122,6 +122,7 @@
                                             <th>Last Name</th>
                                             <th>Gender</th>
                                             <th>State</th>
+                                            <th>Credentials</th>
                                             <th>Specialty</th>
                                             <th>Opioid Prescriber</th>
                                             <th>Total Prescriptions</th>
@@ -138,6 +139,7 @@
                                             <th>Last Name</th>
                                             <th>Gender</th>
                                             <th>State</th>
+                                            <th>Credentials</th>
                                             <th>Specialty</th>
                                             <th>Opioid Prescriber</th>
                                             <th>Total Prescriptions</th>
@@ -153,7 +155,7 @@
 
                                             <th>
                                                 <label for="npi">NPI</label>
-                                                <input type="hidden" id="npi" name="npi" value="{{ pres.npi }}">
+                                                <input readonly id="npi" name="npi" value="{{ pres.npi }}">
                                             </th>
                                             <th>
                                                 <label for="fname">First Name: </label>
@@ -182,6 +184,12 @@
 
                                             </th>
                                             <th>
+                                                <label for="credentials">Credentials</label>
+                                                {% for c in cred %}
+                                                <input id="credentials" name="credentials" value="{{ c.credentials }}">
+                                                {% endfor %}
+                                            </th>
+                                            <th>
                                                 <label for="specialty">Specialty: </label>
                                                 <input id="specialty" name="specialty" value="{{ pres.specialty }}">
                                             </th>
@@ -204,8 +212,7 @@
                                                 {{ d.qty }}
                                                 <br>
                                                 AverageQty:
-                                                {{ avg }}
-
+                                                {{ avg.qty__avg }}
                                                 {% endfor %}
                                             </th>
                                         </tr>

@@ -10,12 +10,15 @@ from django.db import models
 
 class PdDrugs(models.Model):
     drugid = models.IntegerField(primary_key=True)
-    drugname = models.CharField(max_length=30)
+    drugname = models.CharField(max_length=30, unique=True)
     isopioid = models.CharField(max_length=5)
 
     class Meta:
         #managed = False
         db_table = 'pd_drugs'
+    
+    def __str__ (self):
+        return(self.drugname)
 
 
 class PdPrescriber(models.Model):
@@ -32,15 +35,25 @@ class PdPrescriber(models.Model):
         #managed = False
         db_table = 'pd_prescriber'
 
+    def __str__ (self):
+        return(self.full_name)
+
+    @property
+    def full_name(self):
+        return '%s %s' % (self.fname, self.lname)
+
 
 class PdPrescribersCredentials(models.Model):
-    npi = models.IntegerField(primary_key=True)
+    npi = models.ForeignKey(PdPrescriber, to_field="npi", db_column="npi", on_delete=models.DO_NOTHING)
     credentials = models.CharField(max_length=20)
 
     class Meta:
         #managed = False
         db_table = 'pd_prescribers_credentials'
         unique_together = (('npi', 'credentials'),)
+
+    def __str__ (self):
+        return(self.npi)
 
 
 class PdStatedata(models.Model):
@@ -53,13 +66,19 @@ class PdStatedata(models.Model):
         #managed = False
         db_table = 'pd_statedata'
 
+    def __str__ (self):
+        return(self.state)
+
 
 class PdTriple(models.Model):
     id = models.IntegerField(primary_key=True)
-    prescriberid = models.IntegerField()
-    drugname = models.CharField(max_length=30)
+    prescriberid = models.ForeignKey(PdPrescriber, to_field="npi", db_column="prescriberid", on_delete=models.DO_NOTHING)
+    drugname = models.ForeignKey(PdDrugs, to_field="drugname", db_column="drugname", on_delete=models.DO_NOTHING)
     qty = models.IntegerField()
 
     class Meta:
         #managed = False
         db_table = 'pd_triple'
+
+    def __str__ (self):
+        return(self.qty)

@@ -11,7 +11,8 @@
     <title>Prescribers</title>
     <style>
         button.right {
-            float: right;
+            margin-left: 48%;
+            margin-right: 48%;
         }
     </style>
     <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
@@ -106,84 +107,116 @@
                             <label for="search">Python Search Form <input name='search' id="search"
                                     title="Python Search Form"></label>
                             <button type="submit">Search</button>
-                            <button class="right" type="button" href="{% url 'addPrescriber' %}">Add
-                                Prescriber</button>
-
+                            <a class="right" type="button" href="{% url 'addPrescriber' %}">Add
+                                Prescriber</a>
                         </form>
-
-                        <a href="{% url 'addPrescriber' %}"> Add Prescriber</a>
                         <div class="card-body">
-                            <table id="datatablesSimple">
-                                <thead>
-                                    <tr>
-                                        <th>Delete</th>
-                                        <th>NPI</th>
-                                        <th>First Name</th>
-                                        <th>Last Name</th>
-                                        <th>Gender</th>
-                                        <th>State</th>
-                                        <th>Specialty</th>
-                                        <th>Opioid Prescriber</th>
-                                        <th>Total Prescriptions</th>
-                                        <th>View/Edit</th>
+                            <form name="form" method="post" action="{% url 'updatePres' %}">
+                                {% csrf_token %}
+                                <table id="datatablesSimple">
+                                    <thead>
+                                        <tr>
+                                            <th>Delete</th>
+                                            <th>NPI</th>
+                                            <th>First Name</th>
+                                            <th>Last Name</th>
+                                            <th>Gender</th>
+                                            <th>State</th>
+                                            <th>Specialty</th>
+                                            <th>Opioid Prescriber</th>
+                                            <th>Total Prescriptions</th>
+                                            <th>Prescribed Prescriptions</th>
 
-                                    </tr>
+                                        </tr>
 
-                                </thead>
-                                <tfoot>
-                                    <tr>
-                                        <th>Delete</th>
-                                        <th>NPI</th>
-                                        <th>First Name</th>
-                                        <th>Last Name</th>
-                                        <th>Gender</th>
-                                        <th>State</th>
-                                        <th>Specialty</th>
-                                        <th>Opioid Prescriber</th>
-                                        <th>Total Prescriptions</th>
-                                        <th>View/Edit</th>
-                                    </tr>
-                                </tfoot>
-                                <tbody>
-                                    {% for p in pres %}
-                                    <tr>
-                                        <th>
-                                            <a href="{% url 'deletePrescriber' p.npi %}">Delete
-                                            </a>
-                                        </th>
+                                    </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <th>Delete</th>
+                                            <th>NPI</th>
+                                            <th>First Name</th>
+                                            <th>Last Name</th>
+                                            <th>Gender</th>
+                                            <th>State</th>
+                                            <th>Specialty</th>
+                                            <th>Opioid Prescriber</th>
+                                            <th>Total Prescriptions</th>
+                                            <th>Prescribed Prescriptions</th>
+                                        </tr>
+                                    </tfoot>
+                                    <tbody>
+                                        <tr>
+                                            <th>
+                                                <a href="{% url 'deletePrescriber' pres.npi %}">Delete
+                                                </a>
+                                            </th>
 
-                                        <th>
-                                            {{ p.npi }}
-                                        </th>
-                                        <th>
-                                            {{ p.fname }}
-                                        </th>
-                                        <th>
-                                            {{ p.lname }}
-                                        </th>
-                                        <th>
-                                            {{ p.gender }}
-                                        </th>
-                                        <th>
-                                            {{ p.state }}
-                                        </th>
-                                        <th>
-                                            {{ p.specialty }}
-                                        </th>
-                                        <th>
-                                            {{ p.isopioidprescriber }}
-                                        </th>
-                                        <th>
-                                            {{ p.totalprescriptions }}
-                                        </th>
-                                        <th>
-                                            <a href="{% url 'singlePrescriber' p.npi %}">View/Edit
-                                            </a>
-                                        </th>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
+                                            <th>
+                                                <label for="npi">NPI</label>
+                                                <input type="hidden" id="npi" name="npi" value="{{ pres.npi }}">
+                                            </th>
+                                            <th>
+                                                <label for="fname">First Name: </label>
+                                                <input id="fname" name="fname" value="{{ pres.fname }}" autofocus>
+
+                                            </th>
+                                            <th>
+                                                <label for="lname">Last Name: </label>
+                                                <input id="lname" name="lname" selected value="{{ pres.lname }}">
+
+                                            </th>
+                                            <th>
+                                                <label for="gender">Gender: </label>
+                                                <select name="gender" id="gender">
+                                                    <option value="{{ pres.gender }}" selected>Current</option>
+                                                    <option value="M">Male</option>
+                                                    <option value="F">Female</option>
+                                                </select>
+
+                                            </th>
+                                            <th>
+                                                <label for="state">State (Capitalized Two-letter abbreviation): </label>
+                                                <input id="state" name="state" value="{{ pres.state }}" maxlength="2"
+                                                    autocapitalize="characters"
+                                                    oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);">
+
+                                            </th>
+                                            <th>
+                                                <label for="specialty">Specialty: </label>
+                                                <input id="specialty" name="specialty" value="{{ pres.specialty }}">
+                                            </th>
+                                            <th>
+                                                <label for="isopioidprescriber">Isopioidprescriber: </label>
+                                                <input id="isopioidprescriber" name="isopioidprescriber"
+                                                    value="{{ pres.isopioidprescriber }}">
+                                            </th>
+                                            <th>
+                                                <label for="totalprescriptions">Totalprescriptions: </label>
+                                                <input id="totalprescriptions" name="totalprescriptions"
+                                                    value="{{ pres.totalprescriptions }}">
+                                            </th>
+
+                                            <th>
+                                                {% for d in drug %}
+
+                                                {{ d.drugname }}
+                                                Quantity:
+                                                {{ d.qty }}
+                                                <br>
+                                                AverageQty:
+                                                {{ avg }}
+
+                                                {% endfor %}
+                                            </th>
+                                        </tr>
+                                        <button type="submit" class="right">Submit Changes</button>
+
+                                    </tbody>
+                                </table>
+                            </form>
+
+                            </form>
+
                         </div>
 
                     </div>

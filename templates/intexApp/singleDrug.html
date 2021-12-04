@@ -103,7 +103,7 @@
                                         <th>DrugID</th>
                                         <th>Drugname</th>
                                         <th>IsOpioid</th>
-                                        <th>View/Edit</th>
+                                        <th>Top 10 Prescribers</th>
                                     </tr>
 
                                 </thead>
@@ -112,27 +112,33 @@
                                         <th>DrugID</th>
                                         <th>Drugname</th>
                                         <th>IsOpioid</th>
-                                        <th>View/Edit</th>
+                                        <th>Top 10 Prescribers</th>
                                     </tr>
                                 </tfoot>
                                 <tbody>
-                                    {% for d in drug %}
+
                                     <tr>
                                         <th>
-                                            {{ d.drugid }}
+                                            {{ drug.drugid }}
                                         </th>
                                         <th>
-                                            {{ d.drugname }}
+                                            {{ drug.drugname }}
                                         </th>
                                         <th>
-                                            {{ d.isopioid }}
+                                            {{ drug.isopioid }}
                                         </th>
                                         <th>
-                                            <a href="{% url 'singleDrug' d.drugname %}">View/Edit
-                                            </a>
+                                            {% nameArray = [] %}
+                                            {% qtyArray = [] %}
+                                            {% for p in pres %}
+                                            {% nameArray.append({{ p.prescriberid }}) %},
+                                            {% qtyArray.append({{ p.qty }}) %}
+                                            {% endfor %}
+                                            {% for i in range(len(nameArray)) %}
                                         </th>
+
                                     </tr>
-                                    {% endfor %}
+
                                 </tbody>
                             </table>
                         </div>

@@ -85,6 +85,9 @@
             <main>
                 <div class="container-fluid px-4">
                     <h1 class="mt-4">List of Prescribers</h1>
+                    <a class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" style="margin-left: 80%;"
+                        href="{% url 'addPrescriber' %}">
+                        Add Prescriber</a>
                     <ol class="breadcrumb mb-4">
                         <li class="breadcrumb-item"><a href="{% url 'index' %}">Homepage</a></li>
                         <li class="breadcrumb-item active">Static Navigation</li>
@@ -93,25 +96,15 @@
 
                         <form name="form" method="post" action="{% url 'searchPrescribers' %}">
                             {% csrf_token %}
-                            <label for="type">Search Type
-                                <select id="type" name="type">
-                                    <option value="npi">NPI</option>
-                                    <option value="fname">First Name</option>
-                                    <option value="lname">Last Name</option>
-                                    <option value="gender">Gender</option>
-                                    <option value="state">State</option>
-                                    <option value="specialty">Specialty</option>
-                                </select>
-                            </label>
-                            <label for="search">Python Search Form <input name='search' id="search"
-                                    title="Python Search Form"></label>
+                            <label for="search"><b>NPI: </b> <input name='searchNPI' id="searchNPI" title="NPI"></label>
+                            <label><b>First Name: </b><input name='searchFN' id="searchFN" title="First Name"></label>
+                            <label><b>Last Name: </b><input name='searchLN' id="searchLN" title="Last Name"></label>
+                            <label><b>Gender: </b><input name='searchGEN' id="searchGEN" title="Gender"></label>
+                            <label><b>State: </b><input name='searchST' id="searchST" title="State"></label>
+                            <label><b>Specialty: </b><input name='searchSP' id="searchSP" title="Specialty"></label>
                             <button type="submit">Search</button>
-                            <button class="right" type="button" href="{% url 'addPrescriber' %}">Add
-                                Prescriber</button>
 
                         </form>
-
-                        <a href="{% url 'addPrescriber' %}"> Add Prescriber</a>
                         <div class="card-body">
                             <table id="datatablesSimple">
                                 <thead>

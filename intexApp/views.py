@@ -28,8 +28,10 @@ def singleDrugPageView(request, drugname) :
 
 def searchDrugsPageView(request):
     if request.method == "POST":
-        search_term = request.POST['search']
-        results = (PdDrugs.objects.filter(drugname__istartswith=search_term) or PdDrugs.objects.filter(isopioid__istartswith=search_term))
+        #search = request.POST['search']
+        search_DN = request.POST['searchDN']
+        search_IS = request.POST.get('searchIS')
+        results = (PdDrugs.objects.filter(isopioid__istartswith=search_IS, drugname__istartswith=search_DN))
         context = {
             "drug" : results
         }
@@ -54,12 +56,14 @@ def singlePrescriberPageView(request, npi) :
     data = PdPrescriber.objects.get(npi = npi)
     cred = PdPrescribersCredentials.objects.filter(npi = npi)
     drugdata = PdTriple.objects.filter(prescriberid = npi)
-    avg = {}
+    
+    avg = []
     for i in drugdata :
         a = PdTriple.objects.all()
         ab = a.filter(drugname = i.drugname)
-        avg = (ab.aggregate(Avg('qty')))
-    print(avg)
+        avg.append(ab.aggregate(Avg('qty')))
+        print(avg)
+
 
     context = {
         "pres" : data,
@@ -97,7 +101,10 @@ def updatePresPageView(request):
     if request.method == 'POST' :
         npi = request.POST['npi']
 
+        id = request.POST['drugid']
+
         customer = PdPrescriber.objects.get(npi=npi)
+        triple = PdTriple.objects.get(id = id)
 
         customer.fname = request.POST['fname']
         customer.lname = request.POST['lname']
@@ -105,18 +112,27 @@ def updatePresPageView(request):
         customer.state = request.POST['state']
         customer.specialty = request.POST['specialty']
         customer.isopioidprescriber = request.POST['isopioidprescriber']
-        customer.totalprescriptions = request.POST['totalprescriptions']
+        customer.totalprescriptions = str(int(request.POST['totalprescriptions']) + (int(request.POST.get(id)) - triple.qty))#+ (request.POST.get(id) - triple.qty))
+        triple.qty = request.POST.get(id)
+        
 
         customer.save()
+        triple.save()
 
     return prescriberPageView(request)
 
 
 def searchPrescribersPageView(request):
     if request.method == "POST":
-        search_term = request.POST['search']
-        search_type = request.POST.get('type')
-        if search_type == 'npi' :
+        search_npi = request.POST['searchNPI']
+        search_fn = request.POST['searchFN']
+        search_ln = request.POST['searchLN']
+        search_gen = request.POST['searchGEN']
+        search_st = request.POST['searchST']
+        search_sp = request.POST['searchSP']
+        results = PdPrescriber.objects.filter(npi__istartswith=search_npi, fname__istartswith=search_fn, lname__istartswith=search_ln,
+        gender__istartswith=search_gen, state__istartswith=search_st, specialty__istartswith=search_sp)
+        """ if search_type == 'npi' :
             results = PdPrescriber.objects.filter(npi__istartswith=search_term)
         elif search_type == 'fname' :
             results = PdPrescriber.objects.filter(fname__istartswith=search_term)
@@ -127,7 +143,7 @@ def searchPrescribersPageView(request):
         elif search_type == 'state' :
             results = PdPrescriber.objects.filter(state__istartswith=search_term)
         elif search_type == 'specialty' :
-            results = PdPrescriber.objects.filter(specialty__istartswith=search_term)
+            results = PdPrescriber.objects.filter(specialty__istartswith=search_term) """
         context = {
             "pres" : results
         }

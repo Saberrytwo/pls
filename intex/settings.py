@@ -81,7 +81,9 @@ DATABASES = {
                 'NAME': 'intex',
                 'USER': 'postgres',
                 'PASSWORD': 'Password!234',
+                'PASSWORD': 'goldberg',
                 'HOST': 'localhost',
+                'PORT' : '5433',
     }
 }
 

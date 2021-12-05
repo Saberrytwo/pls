@@ -42,9 +42,13 @@ class PdPrescriber(models.Model):
     def full_name(self):
         return '%s %s' % (self.fname, self.lname)
 
+    @property
+    def credentials(self):
+        return '%s %s' % ()
+
 
 class PdPrescribersCredentials(models.Model):
-    npi = models.ForeignKey(PdPrescriber, to_field="npi", db_column="npi", on_delete=models.DO_NOTHING)
+    npi = models.ForeignKey(PdPrescriber, to_field="npi", db_column="npi", primary_key=True, on_delete=models.DO_NOTHING)
     credentials = models.CharField(max_length=20)
 
     class Meta:
@@ -54,6 +58,10 @@ class PdPrescribersCredentials(models.Model):
 
     def __str__ (self):
         return(self.npi)
+
+    @property
+    def fullCreds(self):
+        return '%s %s' % (self.credentials)
 
 
 class PdStatedata(models.Model):

@@ -120,11 +120,7 @@
                                         <th>NPI</th>
                                         <th>First Name</th>
                                         <th>Last Name</th>
-                                        <th>Gender</th>
-                                        <th>State</th>
                                         <th>Specialty</th>
-                                        <th>Opioid Prescriber</th>
-                                        <th>Total Prescriptions</th>
                                         <th>View/Edit</th>
 
                                     </tr>
@@ -136,11 +132,7 @@
                                         <th>NPI</th>
                                         <th>First Name</th>
                                         <th>Last Name</th>
-                                        <th>Gender</th>
-                                        <th>State</th>
                                         <th>Specialty</th>
-                                        <th>Opioid Prescriber</th>
-                                        <th>Total Prescriptions</th>
                                         <th>View/Edit</th>
                                     </tr>
                                 </tfoot>
@@ -162,19 +154,7 @@
                                             {{ p.lname }}
                                         </th>
                                         <th>
-                                            {{ p.gender }}
-                                        </th>
-                                        <th>
-                                            {{ p.state }}
-                                        </th>
-                                        <th>
                                             {{ p.specialty }}
-                                        </th>
-                                        <th>
-                                            {{ p.isopioidprescriber }}
-                                        </th>
-                                        <th>
-                                            {{ p.totalprescriptions }}
                                         </th>
                                         <th>
                                             <a href="{% url 'singlePrescriber' p.npi %}">View/Edit

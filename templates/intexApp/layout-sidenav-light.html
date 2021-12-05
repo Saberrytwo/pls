@@ -83,17 +83,23 @@
                     <h1 class="mt-4">List of Drugs</h1>
                     <ol class="breadcrumb mb-4">
                         <li class="breadcrumb-item"><a href="{% url 'index' %}">Homepage</a></li>
-                        <li class="breadcrumb-item active">Drug List</li>
+                        <li class="breadcrumb-item active"><a href="{% url 'drug' %}">Drug List</a></li>
                     </ol>
                     <div class="card mb-4">
                         <div class="card-header">
                             <i class="fas fa-table me-1"></i>
                             Drugs Datatable
                         </div>
-                        <label for="search">Python Search Form</label>
+                        <label>Python Search Form</label>
                         <form name="form" method="post" action="{% url 'searchDrugs' %}">
                             {% csrf_token %}
-                            <input name='search' id="search" title="Python Search Form">
+                            <label><b>Drugname: </b><input name='searchDN' id="searchDN" title="Drugname"></label>
+                            <!-- <label><b>IsOpioid: </b><input name="searchIS" id="searchIS" title="IsOpioid"></label> -->
+                            <label><b>IsOpioid: <select name="searchIS" id="searchIS">
+                                        <option value="True">True</option>
+                                        <option value="False">False</option>
+                                        <option value="" selected>All</option>
+                                    </select></b></label>
                             <button type="submit">Search</button>
                         </form>
                         <div class="card-body">
@@ -103,7 +109,6 @@
                                         <th>DrugID</th>
                                         <th>Drugname</th>
                                         <th>IsOpioid</th>
-                                        <th>View/Edit</th>
                                     </tr>
 
                                 </thead>
@@ -112,7 +117,6 @@
                                         <th>DrugID</th>
                                         <th>Drugname</th>
                                         <th>IsOpioid</th>
-                                        <th>View/Edit</th>
                                     </tr>
                                 </tfoot>
                                 <tbody>

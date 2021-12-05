@@ -177,7 +177,7 @@
 
                                             </th>
                                             <th>
-                                                <label for="state">State (Capitalized Two-letter abbreviation): </label>
+                                                <label for="state">State (Two-letter abbreviation): </label>
                                                 <input id="state" name="state" value="{{ pres.state }}" maxlength="2"
                                                     autocapitalize="characters"
                                                     oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);">
@@ -205,14 +205,31 @@
                                             </th>
 
                                             <th>
-                                                {% for d in drug %}
+                                                <label for="drugid">DrugID(s):
+                                                    {% for d in drug %}
 
-                                                {{ d.drugname }}
-                                                Quantity:
-                                                {{ d.qty }}
-                                                <br>
-                                                AverageQty:
-                                                {{ avg.qty__avg }}
+                                                    <input id="drugid" readonly name="drugid" value="{{ d.id }}">
+
+                                                    {% endfor %}
+                                                </label>
+                                                <label for="drugname">Drugname(s):
+                                                    {% for d in drug %}
+
+                                                    <input id="drugname" readonly name="drugname"
+                                                        value="{{ d.drugname }}">
+
+                                                    {% endfor %}
+                                                </label>
+                                                <label for="{{ d.id }}">Quantity:
+                                                    {% for d in drug %}
+
+                                                    <input id="{{ d.id }}" name="{{ d.id }}" value="{{ d.qty }}">
+
+                                                    {% endfor %}
+                                                </label>
+                                                <label>Average Quantity: </label>
+                                                {% for a in avg %}
+                                                <input readonly value="{{a.qty__avg}}">
                                                 {% endfor %}
                                             </th>
                                         </tr>

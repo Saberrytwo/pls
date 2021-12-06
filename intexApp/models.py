@@ -27,6 +27,7 @@ class PdPrescriber(models.Model):
     lname = models.CharField(max_length=11)
     gender = models.CharField(max_length=1)
     state = models.CharField(max_length=2)
+    credentials = models.CharField(max_length=18, blank=True, null=True)
     specialty = models.CharField(max_length=62)
     isopioidprescriber = models.CharField(max_length=5)
     totalprescriptions = models.IntegerField()
@@ -41,10 +42,6 @@ class PdPrescriber(models.Model):
     @property
     def full_name(self):
         return '%s %s' % (self.fname, self.lname)
-
-    @property
-    def credentials(self):
-        return '%s %s' % ()
 
 
 class PdPrescribersCredentials(models.Model):

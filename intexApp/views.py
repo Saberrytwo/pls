@@ -1,6 +1,6 @@
 from django.db.models import Avg
 from django.shortcuts import render
-from intexApp.models import PdPrescribersCredentials, PdPrescriber, PdDrugs, PdTriple
+from intexApp.models import PdPrescribersCredentials, PdDrugs, PdTriple, PdStatedata, PdPrescriber
 
 # Create your views here.
 
@@ -44,7 +44,8 @@ def searchDrugsPageView(request):
 
 
 def prescriberPageView(request) :
-    data = PdPrescriber.objects.raw(f"select * from pd_prescriber order by npi")
+    #data = PdPrescriber.objects.raw(f"select * from pd_prescriber order by npi")
+    data = PdPrescriber.objects.all()
     context = {
         "pres" : data,
 
@@ -81,6 +82,7 @@ def addPrescriberPageView(request) :
         prescriber.lname = request.POST['lname']
         prescriber.gender = request.POST['gender']
         prescriber.state = request.POST['state']
+        prescriber.credentials = request.POST['credentials']
         prescriber.specialty = request.POST['specialty']
         prescriber.isopioidprescriber = request.POST['isopioidprescriber']
         prescriber.totalprescriptions = request.POST['totalprescriptions']
@@ -113,7 +115,7 @@ def updatePresPageView(request):
         customer.specialty = request.POST['specialty']
         customer.isopioidprescriber = request.POST['isopioidprescriber']
         customer.totalprescriptions = str(int(request.POST['totalprescriptions']) + (int(request.POST.get(id)) - triple.qty))#+ (request.POST.get(id) - triple.qty))
-        triple.qty = request.POST.get(id)
+        customer.credentials = request.POST['credentials']
         
 
         customer.save()
@@ -130,22 +132,11 @@ def searchPrescribersPageView(request):
         search_gen = request.POST['searchGEN']
         search_st = request.POST['searchST']
         search_sp = request.POST['searchSP']
+        search_cred = request.POST['searchCRED']
         results = PdPrescriber.objects.filter(npi__istartswith=search_npi, fname__istartswith=search_fn, lname__istartswith=search_ln,
-        gender__istartswith=search_gen, state__istartswith=search_st, specialty__istartswith=search_sp)
-        """ if search_type == 'npi' :
-            results = PdPrescriber.objects.filter(npi__istartswith=search_term)
-        elif search_type == 'fname' :
-            results = PdPrescriber.objects.filter(fname__istartswith=search_term)
-        elif search_type == 'lname' :
-            results = PdPrescriber.objects.filter(lname__istartswith=search_term)
-        elif search_type == 'gender' :
-            results = PdPrescriber.objects.filter(gender__istartswith=search_term)
-        elif search_type == 'state' :
-            results = PdPrescriber.objects.filter(state__istartswith=search_term)
-        elif search_type == 'specialty' :
-            results = PdPrescriber.objects.filter(specialty__istartswith=search_term) """
+        gender__istartswith=search_gen, state__istartswith=search_st, specialty__istartswith=search_sp, credentials__istartswith=search_cred)
         context = {
-            "pres" : results
+            "pres" : results,
         }
         return render(request, 'intexApp/layout-static.html', context)
 

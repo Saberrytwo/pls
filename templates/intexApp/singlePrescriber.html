@@ -77,6 +77,9 @@
             <main>
                 <div class="container-fluid px-4">
                     <h1 class="mt-4">List of Prescribers</h1>
+                    <a class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" style="margin-left: 80%;"
+                        href="{% url 'addPrescriber' %}">
+                        Add Prescriber</a>
                     <ol class="breadcrumb mb-4">
                         <li class="breadcrumb-item"><a href="{% url 'index' %}">Homepage</a></li>
                         <li class="breadcrumb-item active"><a href="{% url 'prescriber' %}">List Prescribers</a></li>
@@ -85,21 +88,18 @@
 
                         <form name="form" method="post" action="{% url 'searchPrescribers' %}">
                             {% csrf_token %}
-                            <label for="type">Search Type
-                                <select id="type" name="type">
-                                    <option value="npi">NPI</option>
-                                    <option value="fname">First Name</option>
-                                    <option value="lname">Last Name</option>
-                                    <option value="gender">Gender</option>
-                                    <option value="state">State</option>
-                                    <option value="specialty">Specialty</option>
-                                </select>
-                            </label>
-                            <label for="search">Python Search Form <input name='search' id="search"
-                                    title="Python Search Form"></label>
+                            <label for="search"><b>NPI: </b> <input name='searchNPI' id="searchNPI" title="NPI"></label>
+                            <label><b>First Name: </b><input name='searchFN' id="searchFN" title="First Name"></label>
+                            <label><b>Last Name: </b><input name='searchLN' id="searchLN" title="Last Name"></label>
+                            <label><b>Gender: </b><input name='searchGEN' id="searchGEN" title="Gender"></label>
+                            <label><b>State(Two-Letter Abbreviation): </b><input name='searchST' id="searchST"
+                                    title="State" maxlength="2"
+                                    oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"></label>
+                            <label><b>Specialty: </b><input name='searchSP' id="searchSP" title="Specialty"></label>
+                            <label><b>Credentials: </b><input name='searchCRED' id="searchCRED" title="Credentials"
+                                    oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"></label>
                             <button type="submit">Search</button>
-                            <a class="right" type="button" href="{% url 'addPrescriber' %}">Add
-                                Prescriber</a>
+
                         </form>
                         <div class="card-body">
                             <form name="form" method="post" action="{% url 'updatePres' %}">
@@ -174,10 +174,13 @@
 
                                             </th>
                                             <th>
-                                                <label for="credentials">Credentials</label>
-                                                {% for c in cred %}
-                                                <input id="credentials" name="credentials" value="{{ c.credentials }}">
-                                                {% endfor %}
+                                                <label for="credentials">Credentials(Abbreviations Separated by a
+                                                    Space)</label>
+
+                                                <input id="credentials" name="credentials"
+                                                    value="{{ pres.credentials }}"
+                                                    oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);">
+
                                             </th>
                                             <th>
                                                 <label for="specialty">Specialty: </label>
@@ -213,13 +216,14 @@
                                                 <label for="{{ d.id }}">Quantity:
                                                     {% for d in drug %}
 
-                                                    <input id="{{ d.id }}" name="{{ d.id }}" value="{{ d.qty }}">
+                                                    <input id="{{ d.id }}" name="{{ d.id }}" value="{{ d.qty }}"
+                                                        readonly>
 
                                                     {% endfor %}
                                                 </label>
                                                 <label>Average Quantity: </label>
                                                 {% for a in avg %}
-                                                <input readonly value="{{a.qty__avg}}">
+                                                <input id="avg" name="avg" readonly value="{{a.qty__avg}}">
                                                 {% endfor %}
                                             </th>
                                         </tr>
